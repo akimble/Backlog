@@ -24,5 +24,11 @@ namespace Backlog
         {
             InitializeComponent();
         }
+
+        private void newBacklog_Click(object sender, RoutedEventArgs e)
+        {
+            Window win2 = new Window();
+            win2.Show();
+        }
     }
 }
