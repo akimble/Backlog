@@ -16,14 +16,18 @@ using System.Windows.Shapes;
 namespace Backlog
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for OneBacklogPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class OneBacklogPage : Page
     {
-        public MainWindow()
+        public OneBacklogPage()
         {
             InitializeComponent();
-            MainWindowFrame.NavigationService.Navigate(new BacklogsPage());
+        }
+
+        private void BacklogsPageNavButton_Click(object sender, RoutedEventArgs e)
+        {
+            OneBacklogFrame.NavigationService.Navigate(new BacklogsPage());
         }
     }
 }
