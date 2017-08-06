@@ -16,23 +16,18 @@ using System.Windows.Shapes;
 namespace Backlog
 {
     /// <summary>
-    /// Interaction logic for OneBacklogPage.xaml
+    /// Interaction logic for SublistPage.xaml
     /// </summary>
-    public partial class OneBacklogPage : Page
+    public partial class SublistPage : Page
     {
-        public OneBacklogPage()
+        public SublistPage()
         {
             InitializeComponent();
         }
 
-        private void BacklogsPageNavButton_Click(object sender, RoutedEventArgs e)
+        private void OneBacklogPageNavButton_Click(object sender, RoutedEventArgs e)
         {
-            OneBacklogFrame.NavigationService.Navigate(new BacklogsPage());
-        }
-
-        private void NewSublistButton_Click(object sender, RoutedEventArgs e)
-        {
-            OneBacklogFrame.NavigationService.Navigate(new SublistPage());
+            SublistFrame.NavigationService.Navigate(new OneBacklogPage());
         }
     }
 }
