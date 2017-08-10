@@ -25,12 +25,12 @@
         <TextBox x:Name="BacklogTitleTextbox" Grid.Column="1" Grid.Row="0" Background="#FFF4FD39"
                    FontFamily="Segoe UI Semibold" FontSize="18" TextAlignment="Center"/>
 
-        <ScrollViewer Grid.Column="0" Grid.Row="2" VerticalScrollBarVisibility="Hidden">
-            <Button x:Name="NewBacklogButton" Grid.Column="0" Grid.Row="1" Content="Create New Backlog" 
-                FontFamily="Segoe UI Semibold" FontSize="11" Margin="0,10"/>
-        </ScrollViewer>
+        <DockPanel x:Name="SublistsDockPanel" Grid.Column="0" Grid.Row="1"></DockPanel>
 
-        <StackPanel Grid.Column="1" Grid.Row="1">
+        <Button x:Name="NewBacklogButton" Grid.Column="0" Grid.Row="2" Content="Create New Backlog" 
+                FontFamily="Segoe UI Semibold" FontSize="11" Margin="0,10"/>
+
+        <StackPanel x:Name="sublistStackPanel" Grid.Column="1" Grid.Row="1">
             <Button x:Name="NewSublistButton" Content=" + " FontSize="24" HorizontalAlignment="Left" Margin="10" Background="#FF272525" Foreground="#FF24A836" FontWeight="Bold" Click="NewSublistButton_Click"/>
         </StackPanel>
 

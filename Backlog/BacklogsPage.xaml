@@ -11,16 +11,19 @@
     <Grid Background="#FF272525">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Background="#FFF4FD39" Text="Backlogs" 
-                 FontFamily="Segoe UI Semibold" FontSize="18" TextAlignment="Center"/>
+                   FontFamily="Segoe UI Semibold" FontSize="18" TextAlignment="Center"/>
 
-        <Button x:Name="OneBacklogPageNavButton" Grid.Row="1" Content="Testing: Go to BacklogPage" 
-                FontFamily="Segoe UI Semibold" FontSize="11" Click="OneBacklogPageNavButton_Click"/>
+        <StackPanel x:Name="BacklogsStackPanel" Grid.Row="1"></StackPanel>
 
-        <Frame x:Name="BacklogsFrame" Grid.RowSpan="3"/>
+        <Button x:Name="createBacklogButton" Grid.Row="2" Content=" + " FontSize="24" HorizontalAlignment="Left" 
+                Margin="10" Background="#FF272525" Foreground="#FF24A836" FontWeight="Bold" 
+                Click="createBacklogButton_Click"/>
+
+        <Frame x:Name="BacklogsFrame" Grid.RowSpan="3" Initialized="BacklogsFrame_Initialized"/>
     </Grid>
 </Page>
