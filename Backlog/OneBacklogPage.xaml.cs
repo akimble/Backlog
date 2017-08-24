@@ -21,9 +21,13 @@ namespace Backlog
     /// </summary>
     public partial class OneBacklogPage : Page
     {
+        // Need global variables here
+        private string thisBacklogParent;
+
         public OneBacklogPage(string backlogName)
         {
             InitializeComponent();
+            thisBacklogParent = backlogName;
             // The Textbox in the corner should have the name of the backlog clicked on
             BacklogTitleTextbox.Text = backlogName;
             // Populate the frame components(?) with the sqlite3 database
@@ -41,7 +45,7 @@ namespace Backlog
             // Idea in regards to WARNING in SublistPage.xaml: direct this method to a custom method that sends a second parameter (backlogParent) to SublistPage.xaml
             // - and make a second constructor in there that accepts two parameters
             string myValue = "NewSublist";
-            OneBacklogFrame.NavigationService.Navigate(new SublistPage(myValue));
+            OneBacklogFrame.NavigationService.Navigate(new SublistPage(myValue, thisBacklogParent));
         }
 
         private void populateWithDatabase(string backlogName)
@@ -79,8 +83,8 @@ namespace Backlog
         private void myButton_Click(object sender, RoutedEventArgs e)
         {
             // Cast the sender object to Button and convert the Content property to string
-            string myValue = ((Button)sender).Content.ToString();
-            OneBacklogFrame.NavigationService.Navigate(new SublistPage(myValue));
+            string mySublist = ((Button)sender).Content.ToString();
+            OneBacklogFrame.NavigationService.Navigate(new SublistPage(mySublist, thisBacklogParent));
         }
     }
 }

@@ -21,43 +21,19 @@ namespace Backlog
     /// </summary>
     public partial class SublistPage : Page
     {
-        // Need global variables here
-        private readonly string thisSublistName;
-        private string thisBacklogParent;
+        // Global variables here
+        private readonly string thisBacklogParent;
 
-        public SublistPage(string sublistName)
+        public SublistPage(string sublistName, string backlogParent)
         {
             InitializeComponent();
-            // The Textbox in the corner should have the name of the sublist clicked on
+
+            thisBacklogParent = backlogParent;
+
+            // The Textbox at the top should have the name of the sublist clicked on
             SublistTitleTextbox.Text = sublistName;
-
-            // If the new sublist button was not clicked, start findBacklogParent() WARNING: The newSublist button "goes back" to an empty OneBacklogPage.xaml bc can't get backlogParent
-            thisSublistName = sublistName;
-            if (sublistName != "NewSublist")
-                findBacklogParent();
-        }
-
-        private void findBacklogParent()
-        {
-            try
-            {
-                // Create a new SQLite connection, command, and DataReader
-                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
-                sqlConnection1.Open();
-                SQLiteCommand myCommand = new SQLiteCommand("SELECT [backlogParent] FROM [sublists] WHERE [name] = '" + thisSublistName + "'", sqlConnection1);
-                SQLiteDataReader myReader = myCommand.ExecuteReader();
-
-                myReader.Read();
-                thisBacklogParent = myReader.GetString(0);
-                OneBacklogPageNavButton.Content = thisBacklogParent;
-
-                // Close the connection
-                sqlConnection1.Close();
-            }
-            catch (Exception excep)
-            {
-                Console.WriteLine(excep.ToString());
-            }
+            // The Button in the corner should have the name of the backlog for the sublist
+            OneBacklogPageNavButton.Content = backlogParent;
         }
 
         private void OneBacklogPageNavButton_Click(object sender, RoutedEventArgs e)
