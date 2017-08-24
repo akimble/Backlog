@@ -18,7 +18,9 @@
         <TextBlock Grid.Row="0" Background="#FFF4FD39" Text="Backlogs" 
                    FontFamily="Segoe UI Semibold" FontSize="18" TextAlignment="Center"/>
 
-        <StackPanel x:Name="BacklogsStackPanel" Grid.Row="1"></StackPanel>
+        <ScrollViewer  Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="BacklogsStackPanel"></StackPanel>
+        </ScrollViewer>
 
         <Button x:Name="createBacklogButton" Grid.Row="2" Content=" + " FontSize="24" HorizontalAlignment="Left" 
                 Margin="10" Background="#FF272525" Foreground="#FF24A836" FontWeight="Bold" 

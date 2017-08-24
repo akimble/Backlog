@@ -43,6 +43,7 @@ namespace Backlog
                     // Set properties
                     myButton.Content = myReader["name"].ToString();
                     myButton.Click += new RoutedEventHandler(myButton_Click);
+                    myButton.Margin = new Thickness(100,2,100,2);
 
                     // Add created button to the stackpanel
                     BacklogsStackPanel.Children.Add(myButton);
