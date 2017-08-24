@@ -1,11 +1,10 @@
-﻿<Window x:Class="Backlog.MainWindow"
+﻿<NavigationWindow x:Class="Backlog.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Backlog"
         mc:Ignorable="d"
-        Title="Backlog" Height="350" Width="525">
+        Title="Backlog" Height="350" Width="525" Source="BacklogsPage.xaml" ShowsNavigationUI="False">
     
-    <Frame x:Name="MainWindowFrame"/>
-</Window>
+</NavigationWindow>
