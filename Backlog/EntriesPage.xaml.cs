@@ -17,14 +17,14 @@ using System.Windows.Shapes;
 namespace Backlog
 {
     /// <summary>
-    /// Interaction logic for SublistPage.xaml
+    /// Interaction logic for EntriesPage.xaml
     /// </summary>
-    public partial class SublistPage : Page
+    public partial class EntriesPage : Page
     {
         // Global variables here
         private readonly string thisBacklogParent;
 
-        public SublistPage(string sublistName, string backlogParent)
+        public EntriesPage(string sublistName, string backlogParent)
         {
             InitializeComponent();
 
@@ -35,10 +35,10 @@ namespace Backlog
             // The Button in the corner should have the name of the backlog for the sublist
             OneBacklogPageNavButton.Content = backlogParent;
         }
-
+         
         private void OneBacklogPageNavButton_Click(object sender, RoutedEventArgs e)
         {
-            SublistFrame.NavigationService.Navigate(new OneBacklogPage(thisBacklogParent));
+            this.NavigationService.GoBack();
         }
     }
 }

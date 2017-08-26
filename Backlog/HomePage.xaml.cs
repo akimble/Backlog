@@ -17,16 +17,17 @@ using System.Windows.Shapes;
 namespace Backlog
 {
     /// <summary>
-    /// Interaction logic for BacklogsPage.xaml
+    /// Interaction logic for HomePage.xaml
     /// </summary>
-    public partial class BacklogsPage : Page
+    public partial class HomePage : Page
     {
-        public BacklogsPage()
+        public HomePage()
         {
             InitializeComponent();
+            PopulateFromDB();
         }
 
-        private void BacklogsFrame_Initialized(object sender, EventArgs e)
+        private void PopulateFromDB()
         {
             try
             {
@@ -62,13 +63,13 @@ namespace Backlog
         {
             // Cast the sender object to Button and convert the Content property to string
             string myValue = ((Button)sender).Content.ToString();
-            BacklogsFrame.NavigationService.Navigate(new OneBacklogPage(myValue));
+            this.NavigationService.Navigate(new SublistsPage(myValue));
         }
 
         private void createBacklogButton_Click(object sender, RoutedEventArgs e)
         {
             string x = "";
-            BacklogsFrame.NavigationService.Navigate(new OneBacklogPage(x));
+            this.NavigationService.Navigate(new SublistsPage(x));
         }
     }
 }

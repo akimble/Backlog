@@ -1,4 +1,4 @@
-﻿<Page x:Class="Backlog.SublistPage"
+﻿<Page x:Class="Backlog.EntriesPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:Backlog"
       mc:Ignorable="d" 
       d:DesignHeight="350" d:DesignWidth="525"
-      Title="SublistPage">
+      Title="EntriesPage">
 
     <Grid Background="#FF272525">
         <Grid.ColumnDefinitions>
@@ -39,7 +39,5 @@
                 <Button Content=" + " Background="#FF272525" Foreground="#FF24A836" FontWeight="Bold" FontSize="26" Margin="10,10,0,0"/>
             </StackPanel>
         </ScrollViewer>
-
-        <Frame x:Name="SublistFrame" Grid.ColumnSpan="2" Grid.RowSpan="3"/>
     </Grid>
 </Page>

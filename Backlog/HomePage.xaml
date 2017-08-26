@@ -1,4 +1,4 @@
-﻿<Page x:Class="Backlog.BacklogsPage"
+﻿<Page x:Class="Backlog.HomePage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:Backlog"
       mc:Ignorable="d" 
       d:DesignHeight="350" d:DesignWidth="525"
-      Title="BacklogsPage">
+      Title="HomePage">
 
     <Grid Background="#FF272525">
         <Grid.RowDefinitions>
@@ -25,7 +25,5 @@
         <Button x:Name="createBacklogButton" Grid.Row="2" Content=" + " FontSize="24" HorizontalAlignment="Left" 
                 Margin="10" Background="#FF272525" Foreground="#FF24A836" FontWeight="Bold" 
                 Click="createBacklogButton_Click"/>
-
-        <Frame x:Name="BacklogsFrame" Grid.RowSpan="3" Initialized="BacklogsFrame_Initialized"/>
     </Grid>
 </Page>
