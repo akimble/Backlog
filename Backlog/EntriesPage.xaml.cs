@@ -46,13 +46,14 @@ namespace Backlog
 
                 while (myReader.Read())
                 {
-                    // Create a button
+                    // Create a TextBox
                     TextBox myTextBox = new TextBox();
 
                     // Set TextBox properties
                     myTextBox.Text = myReader["entryLine"].ToString();
                     myTextBox.Margin = new Thickness(10, 2, 10, 2);
-                    myTextBox.HorizontalAlignment = HorizontalAlignment.Stretch;
+                    myTextBox.Tag = myReader["id"];
+                    myTextBox.TextChanged += myTextBox_TextChanged;
 
                     // Add created button to the stackpanel
                     entriesStackPanel.Children.Add(myTextBox);
@@ -70,6 +71,31 @@ namespace Backlog
         private void OneBacklogPageNavButton_Click(object sender, RoutedEventArgs e)
         {
             this.NavigationService.GoBack();
+        }
+
+        private void myTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox myTextBox = sender as TextBox;
+            InsertIntoDB(Convert.ToInt32(myTextBox.Tag), myTextBox.Text);
+        }
+
+        private void InsertIntoDB(int id, string insertThisText)
+        {
+            try
+            {
+                // Create a new SQLite connection, command, and DataReader
+                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                sqlConnection1.Open();
+                SQLiteCommand myCommand = new SQLiteCommand("UPDATE [entries] SET [entryLine] ='" + insertThisText + "' WHERE [id] =" + id, sqlConnection1);
+                SQLiteDataReader myReader = myCommand.ExecuteReader();
+
+                // Close the connection
+                sqlConnection1.Close();
+            }
+            catch (Exception excep)
+            {
+                Console.WriteLine(excep.ToString());
+            }
         }
     }
 }
