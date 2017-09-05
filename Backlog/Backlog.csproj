@@ -74,6 +74,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MultiTag.cs" />
     <Compile Include="SublistsPage.xaml.cs">
       <DependentUpon>SublistsPage.xaml</DependentUpon>
     </Compile>

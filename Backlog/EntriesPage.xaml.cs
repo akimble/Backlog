@@ -21,24 +21,20 @@ namespace Backlog
     /// </summary>
     public partial class EntriesPage : Page
     {
-        // Global variables here
-        private readonly string thisBacklogParent;
 
-        public EntriesPage(Int16 sublist_ID, string sublist_Name, string backlogParent)
+        public EntriesPage(int sublist_ID, string sublist_Name, string backlogParent)
         {
             InitializeComponent();
-
-            thisBacklogParent = backlogParent;
 
             // The Textbox at the top should have the name of the sublist clicked on
             SublistTitleTextbox.Text = sublist_Name;
             // The Button in the corner should have the name of the backlog for the sublist
             OneBacklogPageNavButton.Content = backlogParent;
-            // Populate the frame components(?) with the sqlite3 database
+
             PopulateFromDB(sublist_ID);
         }
 
-        private void PopulateFromDB(Int16 sublist_ID)
+        private void PopulateFromDB(int sublist_ID)
         {
             try
             {
@@ -52,9 +48,9 @@ namespace Backlog
                 {
                     // Create a button
                     TextBox myTextBox = new TextBox();
-                    // Set properties
+
+                    // Set TextBox properties
                     myTextBox.Text = myReader["entryLine"].ToString();
-                    //myTextBox.Click += new RoutedEventHandler(myTextBox_Click);
                     myTextBox.Margin = new Thickness(100, 2, 100, 2);
 
                     // Add created button to the stackpanel

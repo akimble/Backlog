@@ -41,6 +41,7 @@ namespace Backlog
                 {
                     // Create a button
                     Button myButton = new Button();
+
                     // Set properties
                     myButton.Content = myReader["name"].ToString();
                     myButton.Click += new RoutedEventHandler(myButton_Click);

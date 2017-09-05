@@ -21,33 +21,20 @@ namespace Backlog
     /// </summary>
     public partial class SublistsPage : Page
     {
-        // Global variables here
-        private readonly string thisBacklogParent;
 
         public SublistsPage(string backlogName)
         {
             InitializeComponent();
 
-            thisBacklogParent = backlogName;
-
             // The Textbox at the top should have the name of the backlog clicked on
             BacklogTitleTextbox.Text = backlogName;
-            // Populate the frame components(?) with the sqlite3 database
+
             PopulateFromDB(backlogName);
         }
 
         private void HomePageNavButton_Click(object sender, RoutedEventArgs e)
         {
             this.NavigationService.GoBack();
-        }
-
-        private void NewSublistButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Default for a new sublist name is "NewSublist" WARNING: duplicates might cause trouble
-            // Idea in regards to WARNING in EntriesPage.xaml: direct this method to a custom method that sends a second parameter (backlogParent) to EntriesPage.xaml
-            // - and make a second constructor in there that accepts two parameters
-            string myValue = "NewSublist";
-            this.NavigationService.Navigate(new EntriesPage(-1, myValue, thisBacklogParent));
         }
 
         private void PopulateFromDB(string backlogName)
@@ -62,12 +49,17 @@ namespace Backlog
 
                 while (myReader.Read())
                 {
-                    // Create a button
+                    // Create a Button and then a MultiTag object for it
                     Button myButton = new Button();
-                    // Set properties
+                    MultiTag myTags = new MultiTag();
+
+                    // Set Button properties
                     myButton.Content = myReader["name"].ToString();
-                    myButton.Tag = myReader.GetInt16(0);
+                    myButton.Tag = myTags;
                     myButton.Click += new RoutedEventHandler(myButton_Click);
+                    // Set myTags properties
+                    myTags.Add("sublist_id", myReader["id"]);
+                    myTags.Add("sublist_backlogParent", myReader["backlogParent"]);
 
                     // Add created button to the dockpanel
                     sublistStackPanel.Children.Add(myButton);
@@ -85,10 +77,13 @@ namespace Backlog
         private void myButton_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
-            Int16 sublist_ID = (Int16)btn.Tag;
             string sublist_Name = btn.Content.ToString();
 
-            this.NavigationService.Navigate(new EntriesPage(sublist_ID, sublist_Name, thisBacklogParent));
+            MultiTag myTags = (MultiTag)btn.Tag;
+            int sublist_id = Convert.ToInt32(myTags.Get("sublist_id"));
+            string sublist_backlogParent = (string)(myTags.Get("sublist_backlogParent"));
+
+            this.NavigationService.Navigate(new EntriesPage(sublist_id, sublist_Name, sublist_backlogParent));
         }
     }
 }

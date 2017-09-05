@@ -32,7 +32,7 @@
 
         <ScrollViewer Grid.Column="1" Grid.Row="1">
             <StackPanel x:Name="sublistStackPanel">
-                <Button x:Name="NewSublistButton" Content=" + " FontSize="24" HorizontalAlignment="Left" Margin="10" Background="#FF272525" Foreground="#FF24A836" FontWeight="Bold" Click="NewSublistButton_Click"/>
+                <Button x:Name="NewSublistButton" Content=" + " FontSize="24" HorizontalAlignment="Left" Margin="10" Background="#FF272525" Foreground="#FF24A836" FontWeight="Bold"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>
