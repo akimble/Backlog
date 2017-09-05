@@ -22,7 +22,7 @@ namespace Backlog
     public partial class SublistsPage : Page
     {
         // Global variables here
-        private string thisBacklogParent;
+        private readonly string thisBacklogParent;
 
         public SublistsPage(string backlogName)
         {
@@ -33,7 +33,7 @@ namespace Backlog
             // The Textbox at the top should have the name of the backlog clicked on
             BacklogTitleTextbox.Text = backlogName;
             // Populate the frame components(?) with the sqlite3 database
-            populateWithDatabase(backlogName);
+            PopulateFromDB(backlogName);
         }
 
         private void HomePageNavButton_Click(object sender, RoutedEventArgs e)
@@ -47,10 +47,10 @@ namespace Backlog
             // Idea in regards to WARNING in EntriesPage.xaml: direct this method to a custom method that sends a second parameter (backlogParent) to EntriesPage.xaml
             // - and make a second constructor in there that accepts two parameters
             string myValue = "NewSublist";
-            this.NavigationService.Navigate(new EntriesPage(myValue, thisBacklogParent));
+            this.NavigationService.Navigate(new EntriesPage(-1, myValue, thisBacklogParent));
         }
 
-        private void populateWithDatabase(string backlogName)
+        private void PopulateFromDB(string backlogName)
         {
             try
             {
@@ -66,6 +66,7 @@ namespace Backlog
                     Button myButton = new Button();
                     // Set properties
                     myButton.Content = myReader["name"].ToString();
+                    myButton.Tag = myReader.GetInt16(0);
                     myButton.Click += new RoutedEventHandler(myButton_Click);
 
                     // Add created button to the dockpanel
@@ -83,9 +84,11 @@ namespace Backlog
 
         private void myButton_Click(object sender, RoutedEventArgs e)
         {
-            // Cast the sender object to Button and convert the Content property to string
-            string mySublist = ((Button)sender).Content.ToString();
-            this.NavigationService.Navigate(new EntriesPage(mySublist, thisBacklogParent));
+            Button btn = sender as Button;
+            Int16 sublist_ID = (Int16)btn.Tag;
+            string sublist_Name = btn.Content.ToString();
+
+            this.NavigationService.Navigate(new EntriesPage(sublist_ID, sublist_Name, thisBacklogParent));
         }
     }
 }

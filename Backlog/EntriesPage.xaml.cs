@@ -24,18 +24,52 @@ namespace Backlog
         // Global variables here
         private readonly string thisBacklogParent;
 
-        public EntriesPage(string sublistName, string backlogParent)
+        public EntriesPage(Int16 sublist_ID, string sublist_Name, string backlogParent)
         {
             InitializeComponent();
 
             thisBacklogParent = backlogParent;
 
             // The Textbox at the top should have the name of the sublist clicked on
-            SublistTitleTextbox.Text = sublistName;
+            SublistTitleTextbox.Text = sublist_Name;
             // The Button in the corner should have the name of the backlog for the sublist
             OneBacklogPageNavButton.Content = backlogParent;
+            // Populate the frame components(?) with the sqlite3 database
+            PopulateFromDB(sublist_ID);
         }
-         
+
+        private void PopulateFromDB(Int16 sublist_ID)
+        {
+            try
+            {
+                // Create a new SQLite connection, command, and DataReader
+                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                sqlConnection1.Open();
+                SQLiteCommand myCommand = new SQLiteCommand("SELECT * FROM [entries] WHERE [sublistParent] = " + sublist_ID, sqlConnection1);
+                SQLiteDataReader myReader = myCommand.ExecuteReader();
+
+                while (myReader.Read())
+                {
+                    // Create a button
+                    TextBox myTextBox = new TextBox();
+                    // Set properties
+                    myTextBox.Text = myReader["entryLine"].ToString();
+                    //myTextBox.Click += new RoutedEventHandler(myTextBox_Click);
+                    myTextBox.Margin = new Thickness(100, 2, 100, 2);
+
+                    // Add created button to the stackpanel
+                    entriesStackPanel.Children.Add(myTextBox);
+                }
+
+                // Close the connection
+                sqlConnection1.Close();
+            }
+            catch (Exception excep)
+            {
+                Console.WriteLine(excep.ToString());
+            }
+        }
+
         private void OneBacklogPageNavButton_Click(object sender, RoutedEventArgs e)
         {
             this.NavigationService.GoBack();

@@ -31,11 +31,7 @@
         </ScrollViewer>
 
         <ScrollViewer Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" VerticalScrollBarVisibility="Hidden">
-            <StackPanel>
-                <TextBox Text="exampleEntry" VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="10,10,0,0" Background="#FFA8D7DC"/>
-                <TextBox Text="exampleEntry" VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="10,10,0,0" Background="#FFA8D7DC"/>
-                <TextBox Text="exampleEntry" VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="10,10,0,0" Background="#FFA8D7DC"/>
-                <TextBox Text="exampleEntry" VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="10,10,0,0" Background="#FFA8D7DC"/>
+            <StackPanel x:Name="entriesStackPanel">
                 <Button Content=" + " Background="#FF272525" Foreground="#FF24A836" FontWeight="Bold" FontSize="26" Margin="10,10,0,0"/>
             </StackPanel>
         </ScrollViewer>
