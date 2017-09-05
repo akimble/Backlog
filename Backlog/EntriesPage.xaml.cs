@@ -51,7 +51,8 @@ namespace Backlog
 
                     // Set TextBox properties
                     myTextBox.Text = myReader["entryLine"].ToString();
-                    myTextBox.Margin = new Thickness(100, 2, 100, 2);
+                    myTextBox.Margin = new Thickness(10, 2, 10, 2);
+                    myTextBox.HorizontalAlignment = HorizontalAlignment.Stretch;
 
                     // Add created button to the stackpanel
                     entriesStackPanel.Children.Add(myTextBox);
