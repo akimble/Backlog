@@ -53,9 +53,11 @@ namespace Backlog
                     myTextBox.Text = myReader["entryLine"].ToString();
                     myTextBox.Margin = new Thickness(10, 2, 10, 2);
                     myTextBox.Tag = myReader["id"];
-                    myTextBox.TextChanged += myTextBox_TextChanged;
 
-                    // Add created button to the stackpanel
+                    // Event if the keyboard loses focus on the TextBox
+                    myTextBox.LostKeyboardFocus += MyTextBox_LostKeyboardFocus;
+
+                    // Add created TextBox to the stackpanel
                     entriesStackPanel.Children.Add(myTextBox);
                 }
 
@@ -68,26 +70,29 @@ namespace Backlog
             }
         }
 
+        private void MyTextBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            TextBox myTextBox = sender as TextBox;
+
+            InsertIntoDB(Convert.ToInt32(myTextBox.Tag), myTextBox.Text);
+        }
+
         private void OneBacklogPageNavButton_Click(object sender, RoutedEventArgs e)
         {
             this.NavigationService.GoBack();
         }
 
-        private void myTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox myTextBox = sender as TextBox;
-            InsertIntoDB(Convert.ToInt32(myTextBox.Tag), myTextBox.Text);
-        }
-
+        // Update the (changed) text into the DB for the entry with the given id
         private void InsertIntoDB(int id, string insertThisText)
         {
             try
             {
-                // Create a new SQLite connection, command, and DataReader
+                // Create a new SQLite connection, command, and parameter
                 SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
                 sqlConnection1.Open();
-                SQLiteCommand myCommand = new SQLiteCommand("UPDATE [entries] SET [entryLine] ='" + insertThisText + "' WHERE [id] =" + id, sqlConnection1);
-                SQLiteDataReader myReader = myCommand.ExecuteReader();
+                SQLiteCommand myCommand = new SQLiteCommand("UPDATE [entries] SET [entryLine] = @param WHERE [id] =" + id, sqlConnection1);
+                myCommand.Parameters.Add(new SQLiteParameter("@param", insertThisText));
+                myCommand.ExecuteNonQuery();
 
                 // Close the connection
                 sqlConnection1.Close();
