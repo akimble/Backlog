@@ -21,7 +21,6 @@ namespace Backlog
     /// </summary>
     public partial class EntriesPage : Page
     {
-
         public EntriesPage(int sublist_ID, string sublist_Name, string backlogParent)
         {
             InitializeComponent();
@@ -32,6 +31,7 @@ namespace Backlog
             OneBacklogPageNavButton.Content = backlogParent;
 
             PopulateFromDB(sublist_ID);
+            Create_NewEntryButton();
         }
 
         private void PopulateFromDB(int sublist_ID)
@@ -68,6 +68,22 @@ namespace Backlog
             {
                 Console.WriteLine(excep.ToString());
             }
+        }
+
+        private void Create_NewEntryButton()
+        {
+            Button newEntryButton = new Button();
+
+            // Set Button properties
+            newEntryButton.Content = " + ";
+            newEntryButton.Background = (Brush)(new BrushConverter().ConvertFromString("#FF272525"));
+            newEntryButton.Foreground = (Brush)(new BrushConverter().ConvertFromString("#FF24A836"));
+            newEntryButton.FontWeight = FontWeights.Bold;
+            newEntryButton.FontSize = 26;
+            newEntryButton.Margin = new Thickness(10, 2, 10, 2);
+
+            // Add created Button to the stackpanel
+            entriesStackPanel.Children.Add(newEntryButton);
         }
 
         private void MyTextBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)

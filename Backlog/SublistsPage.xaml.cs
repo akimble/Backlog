@@ -21,7 +21,6 @@ namespace Backlog
     /// </summary>
     public partial class SublistsPage : Page
     {
-
         public SublistsPage(string backlogName)
         {
             InitializeComponent();

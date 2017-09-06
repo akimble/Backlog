@@ -33,6 +33,5 @@
         <ScrollViewer Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"  VerticalScrollBarVisibility="Hidden">
             <StackPanel x:Name="entriesStackPanel"></StackPanel>
         </ScrollViewer>
-        <Button Grid.Column="1" Grid.Row="2" Content=" + " Background="#FF272525" Foreground="#FF24A836" FontWeight="Bold" FontSize="26" Margin="10,10,0,0"/>
     </Grid>
 </Page>
