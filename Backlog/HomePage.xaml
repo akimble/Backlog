@@ -18,7 +18,7 @@
         <TextBlock Grid.Row="0" Background="#FFF4FD39" Text="Backlogs" 
                    FontFamily="Segoe UI Semibold" FontSize="18" TextAlignment="Center"/>
 
-        <ScrollViewer  Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer  Grid.Row="1" VerticalScrollBarVisibility="Hidden">
             <StackPanel x:Name="BacklogsStackPanel"></StackPanel>
         </ScrollViewer>
 
