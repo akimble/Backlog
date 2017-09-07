@@ -31,7 +31,7 @@ namespace Backlog
             OneBacklogPageNavButton.Content = backlogParent;
 
             PopulateFromDB(sublist_ID);
-            Create_NewEntryButton();
+            Create_NewEntryButton(sublist_ID);
         }
 
         private void PopulateFromDB(int sublist_ID)
@@ -61,7 +61,8 @@ namespace Backlog
                     entriesStackPanel.Children.Add(myTextBox);
                 }
 
-                // Close the connection
+                // Close the reader and connection
+                myReader.Close();
                 sqlConnection1.Close();
             }
             catch (Exception excep)
@@ -70,7 +71,7 @@ namespace Backlog
             }
         }
 
-        private void Create_NewEntryButton()
+        private void Create_NewEntryButton(int sublist_ID)
         {
             Button newEntryButton = new Button();
 
@@ -81,16 +82,72 @@ namespace Backlog
             newEntryButton.FontWeight = FontWeights.Bold;
             newEntryButton.FontSize = 26;
             newEntryButton.Margin = new Thickness(10, 2, 10, 2);
+            newEntryButton.Click += NewEntryButton_Click;
+            newEntryButton.Tag = sublist_ID;
 
             // Add created Button to the stackpanel
             entriesStackPanel.Children.Add(newEntryButton);
+        }
+
+        private void NewEntryButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Button newEntryButton = sender as Button;
+                int sublist_ID = (int)newEntryButton.Tag;
+                
+                // Insert a new entry. During insertion, the id is autoincremented by 1 for the new entry
+                InsertIntoDB(sublist_ID, "");
+
+                // Create a new SQLite connection, command, and DataReader
+                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                sqlConnection1.Open();
+                SQLiteCommand myID = new SQLiteCommand("SELECT [seq] FROM [sqlite_sequence] WHERE [name] = 'entries'", sqlConnection1);
+                SQLiteDataReader myIDReader = myID.ExecuteReader();
+
+                // Obtain the latest auto-incremented id for the entries table
+                myIDReader.Read();
+                int entries_ID = Convert.ToInt32(myIDReader["seq"]);
+                myIDReader.Close();
+
+                // Obtain the row with the latest id value (i.e. the latest entry)
+                SQLiteCommand myCommand = new SQLiteCommand("SELECT * FROM [entries] WHERE [id] = " + entries_ID, sqlConnection1);
+                SQLiteDataReader myReader = myCommand.ExecuteReader();
+
+                // Create a TextBox for the newly inserted row
+                TextBox myTextBox = new TextBox();
+
+                // Set TextBox properties
+                myReader.Read();
+                myTextBox.Text = myReader["entryLine"].ToString();
+                myTextBox.Margin = new Thickness(10, 2, 10, 2);
+                myTextBox.Tag = myReader["id"];
+                myReader.Close();
+
+                // Event if the keyboard loses focus on the TextBox
+                myTextBox.LostKeyboardFocus += MyTextBox_LostKeyboardFocus;
+
+                // Remove newEntryButton from the stackpanel
+                entriesStackPanel.Children.Remove(newEntryButton);
+                // Add created TextBox to the stackpanel (replacing the previously removed newEntryButton)
+                entriesStackPanel.Children.Add(myTextBox);
+                // Create the newEntryButton again so it is placed at the bottom of the stackpanel below the new entry
+                entriesStackPanel.Children.Add(newEntryButton);
+
+                // Close the connection
+                sqlConnection1.Close();
+            }
+            catch (Exception excep)
+            {
+                Console.WriteLine(excep.ToString());
+            }
         }
 
         private void MyTextBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             TextBox myTextBox = sender as TextBox;
 
-            InsertIntoDB(Convert.ToInt32(myTextBox.Tag), myTextBox.Text);
+            UpdateIntoDB(Convert.ToInt32(myTextBox.Tag), myTextBox.Text);
         }
 
         private void OneBacklogPageNavButton_Click(object sender, RoutedEventArgs e)
@@ -98,20 +155,39 @@ namespace Backlog
             this.NavigationService.GoBack();
         }
 
-        // Update the (changed) text into the DB for the entry with the given id
-        private void InsertIntoDB(int id, string insertThisText)
+        private void UpdateIntoDB(int entries_id, string updateThisText)
         {
             try
             {
                 // Create a new SQLite connection, command, and parameter
                 SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
                 sqlConnection1.Open();
-                SQLiteCommand myCommand = new SQLiteCommand("UPDATE [entries] SET [entryLine] = @param WHERE [id] =" + id, sqlConnection1);
-                myCommand.Parameters.Add(new SQLiteParameter("@param", insertThisText));
+                SQLiteCommand myCommand = new SQLiteCommand("UPDATE [entries] SET [entryLine] = @param WHERE [id] =" + entries_id, sqlConnection1);
+                myCommand.Parameters.Add(new SQLiteParameter("@param", updateThisText));
                 myCommand.ExecuteNonQuery();
 
                 // Close the connection
                 sqlConnection1.Close();
+            }
+            catch (Exception excep)
+            {
+                Console.WriteLine(excep.ToString());
+            }
+        }
+
+        private void InsertIntoDB(int sublist_ID, string insertThisText)
+        {
+            try
+            {
+                // Create a new SQLite connection, command, and parameter
+                SQLiteConnection sqlConnection2 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                sqlConnection2.Open();
+                SQLiteCommand myCommand = new SQLiteCommand("INSERT INTO entries (entryLine, sublistParent) VALUES (@param, " + sublist_ID + ")", sqlConnection2);
+                myCommand.Parameters.Add(new SQLiteParameter("@param", insertThisText));
+                myCommand.ExecuteNonQuery();
+
+                // Close the connection
+                sqlConnection2.Close();
             }
             catch (Exception excep)
             {

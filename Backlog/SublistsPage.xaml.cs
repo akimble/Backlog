@@ -64,7 +64,8 @@ namespace Backlog
                     sublistStackPanel.Children.Add(myButton);
                 }
 
-                // Close the connection
+                // Close the reader and connection
+                myReader.Close();
                 sqlConnection1.Close();
             }
             catch (Exception excep)
