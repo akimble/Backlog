@@ -57,8 +57,27 @@ namespace Backlog
                     // Event if the keyboard loses focus on the TextBox
                     myTextBox.LostKeyboardFocus += MyTextBox_LostKeyboardFocus;
 
-                    // Add created TextBox to the stackpanel
-                    entriesStackPanel.Children.Add(myTextBox);
+                    // Create a DockPanel and a delete Button
+                    DockPanel entriesDockPanel = new DockPanel();
+                    Button deleteButton = new Button();
+
+                    // Set Button properties
+                    deleteButton.Content = "  X  ";
+                    deleteButton.Background = (Brush)(new BrushConverter().ConvertFromString("#FF272525"));
+                    deleteButton.Foreground = (Brush)(new BrushConverter().ConvertFromString("#bc010b"));
+
+                    // Set Button style as the ToolBar's Button style (no border)
+                    Style toolbarButtonStyle = (Style)FindResource(ToolBar.ButtonStyleKey);
+                    deleteButton.Style = toolbarButtonStyle;
+
+                    // Add TextBox and Button to DockPanel
+                    deleteButton.SetValue(DockPanel.DockProperty, Dock.Right);
+                    myTextBox.SetValue(DockPanel.DockProperty, Dock.Left);
+                    entriesDockPanel.Children.Add(deleteButton);
+                    entriesDockPanel.Children.Add(myTextBox);
+
+                    // Add created DockPanel to the StackPanel
+                    entriesStackPanel.Children.Add(entriesDockPanel);
                 }
 
                 // Close the reader and connection
