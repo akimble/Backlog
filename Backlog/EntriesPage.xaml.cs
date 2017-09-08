@@ -74,14 +74,20 @@ namespace Backlog
 
         private DockPanel createEntryDockPanel(TextBox myTextBox)
         {
-            // Create a DockPanel and a delete Button
+            // Create a DockPanel, delete Button, and MultiTag object
             DockPanel entriesDockPanel = new DockPanel();
             Button deleteButton = new Button();
+            MultiTag myTags = new MultiTag();
 
             // Set Button properties
             deleteButton.Content = "  X  ";
             deleteButton.Background = (Brush)(new BrushConverter().ConvertFromString("#FF272525"));
             deleteButton.Foreground = (Brush)(new BrushConverter().ConvertFromString("#bc010b"));
+            deleteButton.Tag = myTags;
+            deleteButton.Click += DeleteButton_Click;
+            // Set myTags properties
+            myTags.Add("entries_id", myTextBox.Tag);
+            myTags.Add("myDockPanel", entriesDockPanel);
 
             // Set Button style as the ToolBar's Button style (no border)
             Style toolbarButtonStyle = (Style)FindResource(ToolBar.ButtonStyleKey);
@@ -94,6 +100,24 @@ namespace Backlog
             entriesDockPanel.Children.Add(myTextBox);
 
             return entriesDockPanel;
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Bring up a confirmation box
+            var confirmResult = MessageBox.Show("Are you sure you want to delete this entry?", "Confirm Delete", MessageBoxButton.YesNo);
+
+            // If "Yes" is chosen, delete the entry from the database
+            if (confirmResult == MessageBoxResult.Yes)
+            {
+                Button deleteButton = sender as Button;
+                MultiTag myTags = (MultiTag)deleteButton.Tag;
+                int entries_id = Convert.ToInt32(myTags.Get("entries_id"));
+                DockPanel myDockPanel = (DockPanel)myTags.Get("myDockPanel");
+
+                DeleteFromDB(entries_id, myDockPanel);
+
+            }
         }
 
         private void Create_NewEntryButton(int sublist_ID)
@@ -214,6 +238,27 @@ namespace Backlog
 
                 // Close the connection
                 sqlConnection2.Close();
+            }
+            catch (Exception excep)
+            {
+                Console.WriteLine(excep.ToString());
+            }
+        }
+
+        private void DeleteFromDB(int entries_id, DockPanel myDockPanel)
+        {
+            try
+            {
+                // Create a new SQLite connection, command, and parameter
+                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                sqlConnection1.Open();
+                SQLiteCommand myCommand = new SQLiteCommand("DELETE FROM [entries] WHERE [id] =" + entries_id, sqlConnection1);
+                myCommand.ExecuteNonQuery();
+
+                // Close the connection
+                sqlConnection1.Close();
+
+                entriesStackPanel.Children.Remove(myDockPanel);
             }
             catch (Exception excep)
             {
