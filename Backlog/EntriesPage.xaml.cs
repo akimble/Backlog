@@ -57,26 +57,8 @@ namespace Backlog
                     // Event if the keyboard loses focus on the TextBox
                     myTextBox.LostKeyboardFocus += MyTextBox_LostKeyboardFocus;
 
-                    // Create a DockPanel and a delete Button
-                    DockPanel entriesDockPanel = new DockPanel();
-                    Button deleteButton = new Button();
-
-                    // Set Button properties
-                    deleteButton.Content = "  X  ";
-                    deleteButton.Background = (Brush)(new BrushConverter().ConvertFromString("#FF272525"));
-                    deleteButton.Foreground = (Brush)(new BrushConverter().ConvertFromString("#bc010b"));
-
-                    // Set Button style as the ToolBar's Button style (no border)
-                    Style toolbarButtonStyle = (Style)FindResource(ToolBar.ButtonStyleKey);
-                    deleteButton.Style = toolbarButtonStyle;
-
-                    // Add TextBox and Button to DockPanel
-                    deleteButton.SetValue(DockPanel.DockProperty, Dock.Right);
-                    myTextBox.SetValue(DockPanel.DockProperty, Dock.Left);
-                    entriesDockPanel.Children.Add(deleteButton);
-                    entriesDockPanel.Children.Add(myTextBox);
-
                     // Add created DockPanel to the StackPanel
+                    DockPanel entriesDockPanel = createEntryDockPanel(myTextBox);
                     entriesStackPanel.Children.Add(entriesDockPanel);
                 }
 
@@ -88,6 +70,30 @@ namespace Backlog
             {
                 Console.WriteLine(excep.ToString());
             }
+        }
+
+        private DockPanel createEntryDockPanel(TextBox myTextBox)
+        {
+            // Create a DockPanel and a delete Button
+            DockPanel entriesDockPanel = new DockPanel();
+            Button deleteButton = new Button();
+
+            // Set Button properties
+            deleteButton.Content = "  X  ";
+            deleteButton.Background = (Brush)(new BrushConverter().ConvertFromString("#FF272525"));
+            deleteButton.Foreground = (Brush)(new BrushConverter().ConvertFromString("#bc010b"));
+
+            // Set Button style as the ToolBar's Button style (no border)
+            Style toolbarButtonStyle = (Style)FindResource(ToolBar.ButtonStyleKey);
+            deleteButton.Style = toolbarButtonStyle;
+
+            // Add TextBox and Button to DockPanel
+            deleteButton.SetValue(DockPanel.DockProperty, Dock.Right);
+            myTextBox.SetValue(DockPanel.DockProperty, Dock.Left);
+            entriesDockPanel.Children.Add(deleteButton);
+            entriesDockPanel.Children.Add(myTextBox);
+
+            return entriesDockPanel;
         }
 
         private void Create_NewEntryButton(int sublist_ID)
@@ -148,8 +154,9 @@ namespace Backlog
 
                 // Remove newEntryButton from the stackpanel
                 entriesStackPanel.Children.Remove(newEntryButton);
-                // Add created TextBox to the stackpanel (replacing the previously removed newEntryButton)
-                entriesStackPanel.Children.Add(myTextBox);
+                // Add newly created DockPanel (of a TextBox and delete Button) to the StackPanel
+                DockPanel entriesDockPanel = createEntryDockPanel(myTextBox);
+                entriesStackPanel.Children.Add(entriesDockPanel);
                 // Create the newEntryButton again so it is placed at the bottom of the stackpanel below the new entry
                 entriesStackPanel.Children.Add(newEntryButton);
 
