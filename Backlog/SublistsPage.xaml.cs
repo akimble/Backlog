@@ -33,7 +33,7 @@ namespace Backlog
 
         private void HomePageNavButton_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.GoBack();
+            this.NavigationService.Navigate(new HomePage());
         }
 
         private void PopulateFromDB(string backlogName)

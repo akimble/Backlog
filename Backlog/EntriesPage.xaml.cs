@@ -25,13 +25,47 @@ namespace Backlog
         {
             InitializeComponent();
 
+            // Go back to SublistPage with the right parameter
+            OneBacklogPageNavButton.Tag = backlogParent;
+
             // The Textbox at the top should have the name of the sublist clicked on
-            SublistTitleTextbox.Text = sublist_Name;
+            SublistTitleTextBox.Text = sublist_Name;
+
+            // Save any changes made to SublistTitleTextBox
+            ImplementTitleTextBox(sublist_ID);
+
             // The Button in the corner should have the name of the backlog for the sublist
             OneBacklogPageNavButton.Content = backlogParent;
 
+            // Fill the page with entries from the database
             PopulateFromDB(sublist_ID);
             Create_NewEntryButton(sublist_ID);
+        }
+
+        private void ImplementTitleTextBox(int sublist_ID)
+        {
+            SublistTitleTextBox.Tag = sublist_ID;
+            SublistTitleTextBox.LostKeyboardFocus += SublistTitleTextbox_LostKeyboardFocus;
+        }
+
+        private void SublistTitleTextbox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            try
+            {
+                // Create a new SQLite connection, command, and parameter
+                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                sqlConnection1.Open();
+                SQLiteCommand myCommand = new SQLiteCommand("UPDATE [sublists] SET [name] = @param WHERE [id] = " + SublistTitleTextBox.Tag, sqlConnection1);
+                myCommand.Parameters.Add(new SQLiteParameter("@param", SublistTitleTextBox.Text));
+                myCommand.ExecuteNonQuery();
+
+                // Close the connection
+                sqlConnection1.Close();
+            }
+            catch (Exception excep)
+            {
+                Console.WriteLine(excep.ToString());
+            }
         }
 
         private void PopulateFromDB(int sublist_ID)
@@ -202,7 +236,7 @@ namespace Backlog
 
         private void OneBacklogPageNavButton_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.GoBack();
+            this.NavigationService.Navigate(new SublistsPage((string)OneBacklogPageNavButton.Tag));
         }
 
         private void UpdateIntoDB(int entries_id, string updateThisText)

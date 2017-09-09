@@ -22,7 +22,7 @@
         <Button x:Name="OneBacklogPageNavButton" Grid.Column="0" Grid.Row="0" Content="[selectedBacklog]" Background="#FFF4FD39" 
                    FontFamily="Segoe UI Semibold" FontSize="18" Click="OneBacklogPageNavButton_Click"/>
 
-        <TextBox x:Name="SublistTitleTextbox" Grid.Column="1" Grid.Row="0" Background="#FFF4FD39"
+        <TextBox x:Name="SublistTitleTextBox" Grid.Column="1" Grid.Row="0" Background="#FFF4FD39"
                    FontFamily="Segoe UI Semibold" FontSize="18" TextAlignment="Center" Text="[selectedSublist]"/>
 
         <ScrollViewer Grid.Column="0" Grid.Row="2" VerticalScrollBarVisibility="Hidden">
