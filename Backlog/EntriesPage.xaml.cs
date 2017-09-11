@@ -87,8 +87,8 @@ namespace Backlog
                     myTextBox.Text = myReader["entryLine"].ToString();
                     myTextBox.Margin = new Thickness(10, 2, 10, 2);
                     myTextBox.Tag = myReader["id"];
-                    myTextBox.Background = (Brush)(new BrushConverter().ConvertFromString("#FF272525"));
-                    myTextBox.Foreground = Brushes.White;
+                    myTextBox.Background = MyColors.DarkGrey();
+                    myTextBox.Foreground = MyColors.White();
 
                     // Event if the keyboard loses focus on the TextBox
                     myTextBox.LostKeyboardFocus += MyTextBox_LostKeyboardFocus;
@@ -117,8 +117,8 @@ namespace Backlog
 
             // Set Button properties
             deleteButton.Content = "  X  ";
-            deleteButton.Background = (Brush)(new BrushConverter().ConvertFromString("#FF272525"));
-            deleteButton.Foreground = (Brush)(new BrushConverter().ConvertFromString("#bc010b"));
+            deleteButton.Background = MyColors.DarkGrey();
+            deleteButton.Foreground = MyColors.Garnet();
             deleteButton.Tag = myTags;
             deleteButton.Click += DeleteButton_Click;
             // Set myTags properties
@@ -162,8 +162,8 @@ namespace Backlog
 
             // Set Button properties
             newEntryButton.Content = " + ";
-            newEntryButton.Background = (Brush)(new BrushConverter().ConvertFromString("#FF272525"));
-            newEntryButton.Foreground = (Brush)(new BrushConverter().ConvertFromString("#FF24A836"));
+            newEntryButton.Background = MyColors.DarkGrey();
+            newEntryButton.Foreground = MyColors.Green();
             newEntryButton.FontWeight = FontWeights.Bold;
             newEntryButton.FontSize = 26;
             newEntryButton.Margin = new Thickness(10, 2, 10, 2);
@@ -200,8 +200,8 @@ namespace Backlog
                 myTextBox.Text = myReader["entryLine"].ToString();
                 myTextBox.Margin = new Thickness(10, 2, 10, 2);
                 myTextBox.Tag = myReader["id"];
-                myTextBox.Background = (Brush)(new BrushConverter().ConvertFromString("#FF272525"));
-                myTextBox.Foreground = Brushes.White;
+                myTextBox.Background = MyColors.DarkGrey();
+                myTextBox.Foreground = MyColors.White();
                 myReader.Close();
 
                 // Event if the keyboard loses focus on the TextBox

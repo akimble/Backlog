@@ -75,6 +75,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MultiTag.cs" />
+    <Compile Include="MyColors.cs" />
     <Compile Include="SublistsPage.xaml.cs">
       <DependentUpon>SublistsPage.xaml</DependentUpon>
     </Compile>
