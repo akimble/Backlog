@@ -28,7 +28,40 @@ namespace Backlog
             // The Textbox at the top should have the name of the backlog clicked on
             BacklogTitleTextbox.Text = backlogName;
 
+            // Save any changes made to BacklogTitleTextbox
+            ImplementTitleTextBox(backlogName);
+
             PopulateFromDB(backlogName);
+        }
+
+        private void ImplementTitleTextBox(string backlogName)
+        {
+            BacklogTitleTextbox.Tag = backlogName;
+            BacklogTitleTextbox.LostKeyboardFocus += BacklogTitleTextbox_LostKeyboardFocus;
+        }
+
+        private void BacklogTitleTextbox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            try
+            {
+                // Create a new SQLite connection, command, and parameter
+                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                sqlConnection1.Open();
+                SQLiteCommand myCommand = new SQLiteCommand("UPDATE [backlogs] SET [name] = @param WHERE [name] = '" + BacklogTitleTextbox.Tag + "'", sqlConnection1);
+                myCommand.Parameters.Add(new SQLiteParameter("@param", BacklogTitleTextbox.Text));
+                myCommand.ExecuteNonQuery();
+
+                // Reset Tag for BacklogTitleTextbox
+                BacklogTitleTextbox.Tag = BacklogTitleTextbox.Text;
+
+                // Close the connection
+                sqlConnection1.Close();
+            }
+            catch (SQLiteException excep)
+            {
+                if (excep.ErrorCode == 19)
+                    MessageBox.Show("Cannot be the same name as another Backlog.");
+            }
         }
 
         private void HomePageNavButton_Click(object sender, RoutedEventArgs e)
