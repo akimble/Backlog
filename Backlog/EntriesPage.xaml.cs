@@ -87,6 +87,8 @@ namespace Backlog
                     myTextBox.Text = myReader["entryLine"].ToString();
                     myTextBox.Margin = new Thickness(10, 2, 10, 2);
                     myTextBox.Tag = myReader["id"];
+                    myTextBox.Background = (Brush)(new BrushConverter().ConvertFromString("#FF272525"));
+                    myTextBox.Foreground = Brushes.White;
 
                     // Event if the keyboard loses focus on the TextBox
                     myTextBox.LostKeyboardFocus += MyTextBox_LostKeyboardFocus;
@@ -182,18 +184,11 @@ namespace Backlog
                 // Insert a new entry. During insertion, the id is autoincremented by 1 for the new entry
                 InsertIntoDB(sublist_ID, "");
 
-                // Create a new SQLite connection, command, and DataReader
-                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
-                sqlConnection1.Open();
-                SQLiteCommand myID = new SQLiteCommand("SELECT [seq] FROM [sqlite_sequence] WHERE [name] = 'entries'", sqlConnection1);
-                SQLiteDataReader myIDReader = myID.ExecuteReader();
-
-                // Obtain the latest auto-incremented id for the entries table
-                myIDReader.Read();
-                int entries_ID = Convert.ToInt32(myIDReader["seq"]);
-                myIDReader.Close();
+                int entries_ID = getLatestEntries_ID();
 
                 // Obtain the row with the latest id value (i.e. the latest entry)
+                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                sqlConnection1.Open();
                 SQLiteCommand myCommand = new SQLiteCommand("SELECT * FROM [entries] WHERE [id] = " + entries_ID, sqlConnection1);
                 SQLiteDataReader myReader = myCommand.ExecuteReader();
 
@@ -205,6 +200,8 @@ namespace Backlog
                 myTextBox.Text = myReader["entryLine"].ToString();
                 myTextBox.Margin = new Thickness(10, 2, 10, 2);
                 myTextBox.Tag = myReader["id"];
+                myTextBox.Background = (Brush)(new BrushConverter().ConvertFromString("#FF272525"));
+                myTextBox.Foreground = Brushes.White;
                 myReader.Close();
 
                 // Event if the keyboard loses focus on the TextBox
@@ -225,6 +222,24 @@ namespace Backlog
             {
                 Console.WriteLine(excep.ToString());
             }
+        }
+
+        private int getLatestEntries_ID()
+        {
+            int entries_ID = -1;
+
+            // Create a new SQLite connection, command, and DataReader
+            SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+            sqlConnection1.Open();
+            SQLiteCommand myID = new SQLiteCommand("SELECT [seq] FROM [sqlite_sequence] WHERE [name] = 'entries'", sqlConnection1);
+            SQLiteDataReader myIDReader = myID.ExecuteReader();
+
+            // Obtain the latest auto-incremented id for the entries table
+            myIDReader.Read();
+            entries_ID = Convert.ToInt32(myIDReader["seq"]);
+            myIDReader.Close();
+
+            return entries_ID;
         }
 
         private void MyTextBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
