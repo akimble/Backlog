@@ -31,6 +31,9 @@ namespace Backlog
             // Save any changes made to BacklogTitleTextbox
             ImplementTitleTextBox(backlogName);
 
+            // Save backlogParent for NewSublistWindow to inherit
+            NewSublistButton.Tag = backlogName;
+
             PopulateFromDB(backlogName);
         }
 
@@ -93,7 +96,7 @@ namespace Backlog
                     myTags.Add("sublist_id", myReader["id"]);
                     myTags.Add("sublist_backlogParent", myReader["backlogParent"]);
 
-                    // Add created button to the dockpanel
+                    // Add created button to the StackPanel
                     sublistStackPanel.Children.Add(myButton);
                 }
 
@@ -117,6 +120,65 @@ namespace Backlog
             string sublist_backlogParent = (string)(myTags.Get("sublist_backlogParent"));
 
             this.NavigationService.Navigate(new EntriesPage(sublist_id, sublist_Name, sublist_backlogParent));
+        }
+
+        private void NewSublistButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button myButton = sender as Button;
+            string backlogParent = myButton.Tag.ToString();
+
+            // Create a new window to input new information about the new Sublist
+            NewSublistWindow myWindow = new NewSublistWindow(backlogParent);
+            myWindow.Closing += MyWindow_Closing;
+            myWindow.ShowDialog();
+        }
+
+        private void MyWindow_Closing(object sender, EventArgs e)
+        {
+            int sublists_ID = getLatestEntries_ID();
+
+            // Obtain the row with the latest id value (i.e. the latest entry)
+            SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+            sqlConnection1.Open();
+            SQLiteCommand myCommand = new SQLiteCommand("SELECT * FROM [sublists] WHERE [id] = " + sublists_ID, sqlConnection1);
+            SQLiteDataReader myReader = myCommand.ExecuteReader();
+
+            // Create a Button for the newly inserted row
+            Button myButton = new Button();
+            MultiTag myTags = new MultiTag();
+
+            // Set Button properties
+            myReader.Read();
+            myButton.Content = myReader["name"].ToString();
+            myButton.Tag = myTags;
+            myButton.Click += new RoutedEventHandler(myButton_Click);
+            // Set myTags properties
+            myTags.Add("sublist_id", myReader["id"]);
+            myTags.Add("sublist_backlogParent", myReader["backlogParent"]);
+            myReader.Close();
+
+            // Add created button to the StackPanel
+            sublistStackPanel.Children.Add(myButton);
+
+            sqlConnection1.Close();
+        }
+
+        private int getLatestEntries_ID()
+        {
+            int entries_ID = -1;
+
+            // Create a new SQLite connection, command, and DataReader
+            SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+            sqlConnection1.Open();
+            SQLiteCommand myID = new SQLiteCommand("SELECT [seq] FROM [sqlite_sequence] WHERE [name] = 'sublists'", sqlConnection1);
+            SQLiteDataReader myIDReader = myID.ExecuteReader();
+
+            // Obtain the latest auto-incremented id for the entries table
+            myIDReader.Read();
+            entries_ID = Convert.ToInt32(myIDReader["seq"]);
+            myIDReader.Close();
+
+            return entries_ID;
         }
     }
 }
