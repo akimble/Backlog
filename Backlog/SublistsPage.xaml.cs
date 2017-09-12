@@ -93,16 +93,87 @@ namespace Backlog
                     myButton.Tag = myTags;
                     myButton.Click += new RoutedEventHandler(myButton_Click);
                     // Set myTags properties
-                    myTags.Add("sublist_id", myReader["id"]);
-                    myTags.Add("sublist_backlogParent", myReader["backlogParent"]);
+                    myTags.Add("sublists_id", myReader["id"]);
+                    myTags.Add("sublists_backlogParent", myReader["backlogParent"]);
 
-                    // Add created button to the StackPanel
-                    sublistStackPanel.Children.Add(myButton);
+                    // Add created DockPanel to the StackPanel
+                    DockPanel entriesDockPanel = createSublistDockPanel(myButton);
+                    sublistStackPanel.Children.Add(entriesDockPanel);
                 }
 
                 // Close the reader and connection
                 myReader.Close();
                 sqlConnection1.Close();
+            }
+            catch (Exception excep)
+            {
+                Console.WriteLine(excep.ToString());
+            }
+        }
+
+        private DockPanel createSublistDockPanel(Button myButton)
+        {
+            // Create a DockPanel, delete Button, and MultiTag object
+            DockPanel sublistsDockPanel = new DockPanel();
+            Button deleteButton = new Button();
+            MultiTag myTags = (MultiTag)myButton.Tag;
+            MultiTag myDeleteTags = new MultiTag();
+
+            // Set Button properties
+            deleteButton.Content = "  X  ";
+            deleteButton.Background = MyColors.DarkGrey();
+            deleteButton.Foreground = MyColors.Garnet();
+            deleteButton.Tag = myDeleteTags;
+            deleteButton.Click += DeleteButton_Click;
+            // Set myDeleteTags properties
+            myDeleteTags.Add("sublists_id", myTags.Get("sublists_id"));
+            myDeleteTags.Add("myDockPanel", sublistsDockPanel);
+
+            // Set Button style as the ToolBar's Button style (no border)
+            Style toolbarButtonStyle = (Style)FindResource(ToolBar.ButtonStyleKey);
+            deleteButton.Style = toolbarButtonStyle;
+
+            // Add TextBox and Button to DockPanel
+            deleteButton.SetValue(DockPanel.DockProperty, Dock.Right);
+            myButton.SetValue(DockPanel.DockProperty, Dock.Left);
+            sublistsDockPanel.Children.Add(deleteButton);
+            sublistsDockPanel.Children.Add(myButton);
+
+            return sublistsDockPanel;
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Bring up a confirmation box
+            var confirmResult = MessageBox.Show("Are you sure you want to delete this sublist?", "Confirm Delete", MessageBoxButton.YesNo);
+
+            // If "Yes" is chosen, delete the sublist from the database
+            if (confirmResult == MessageBoxResult.Yes)
+            {
+                Button deleteButton = sender as Button;
+                MultiTag myTags = (MultiTag)deleteButton.Tag;
+                int sublist_id = Convert.ToInt32(myTags.Get("sublists_id"));
+                DockPanel myDockPanel = (DockPanel)myTags.Get("myDockPanel");
+
+                DeleteFromDB(sublist_id, myDockPanel);
+
+            }
+        }
+
+        private void DeleteFromDB(int sublist_id, DockPanel myDockPanel)
+        {
+            try
+            {
+                // Create a new SQLite connection, command, and parameter
+                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                sqlConnection1.Open();
+                SQLiteCommand myCommand = new SQLiteCommand("DELETE FROM [sublists] WHERE [id] =" + sublist_id, sqlConnection1);
+                myCommand.ExecuteNonQuery();
+
+                // Close the connection
+                sqlConnection1.Close();
+
+                sublistStackPanel.Children.Remove(myDockPanel);
             }
             catch (Exception excep)
             {
@@ -116,8 +187,8 @@ namespace Backlog
             string sublist_Name = btn.Content.ToString();
 
             MultiTag myTags = (MultiTag)btn.Tag;
-            int sublist_id = Convert.ToInt32(myTags.Get("sublist_id"));
-            string sublist_backlogParent = (string)(myTags.Get("sublist_backlogParent"));
+            int sublist_id = Convert.ToInt32(myTags.Get("sublists_id"));
+            string sublist_backlogParent = (string)(myTags.Get("sublists_backlogParent"));
 
             this.NavigationService.Navigate(new EntriesPage(sublist_id, sublist_Name, sublist_backlogParent));
         }
@@ -153,12 +224,13 @@ namespace Backlog
             myButton.Tag = myTags;
             myButton.Click += new RoutedEventHandler(myButton_Click);
             // Set myTags properties
-            myTags.Add("sublist_id", myReader["id"]);
-            myTags.Add("sublist_backlogParent", myReader["backlogParent"]);
+            myTags.Add("sublists_id", myReader["id"]);
+            myTags.Add("sublists_backlogParent", myReader["backlogParent"]);
             myReader.Close();
 
-            // Add created button to the StackPanel
-            sublistStackPanel.Children.Add(myButton);
+            // Add created DockPanel to the StackPanel
+            DockPanel entriesDockPanel = createSublistDockPanel(myButton);
+            sublistStackPanel.Children.Add(entriesDockPanel);
 
             sqlConnection1.Close();
         }
