@@ -156,7 +156,6 @@ namespace Backlog
                 DockPanel myDockPanel = (DockPanel)myTags.Get("myDockPanel");
 
                 DeleteFromDB(sublist_id, myDockPanel);
-
             }
         }
 
@@ -167,8 +166,10 @@ namespace Backlog
                 // Create a new SQLite connection, command, and parameter
                 SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
                 sqlConnection1.Open();
-                SQLiteCommand myCommand = new SQLiteCommand("DELETE FROM [sublists] WHERE [id] =" + sublist_id, sqlConnection1);
-                myCommand.ExecuteNonQuery();
+                SQLiteCommand myCommand1 = new SQLiteCommand("DELETE FROM [entries] WHERE [sublistParent] =" + sublist_id, sqlConnection1);
+                SQLiteCommand myCommand2 = new SQLiteCommand("DELETE FROM [sublists] WHERE [id] =" + sublist_id, sqlConnection1);
+                myCommand1.ExecuteNonQuery();
+                myCommand2.ExecuteNonQuery();
 
                 // Close the connection
                 sqlConnection1.Close();
