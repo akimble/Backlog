@@ -16,42 +16,46 @@ using System.Windows.Shapes;
 namespace Backlog
 {
     /// <summary>
-    /// Interaction logic for NewSublistWindow.xaml
+    /// Interaction logic for NewBacklogWindow.xaml
     /// </summary>
-    public partial class NewSublistWindow : Window
+    public partial class NewBacklogWindow : Window
     {
-        public NewSublistWindow(string backlogParent)
+        public NewBacklogWindow()
         {
             InitializeComponent();
-            Save.Tag = backlogParent;
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            Button myButton = sender as Button;
-            string backlogParent = myButton.Tag.ToString();
-
-            InsertIntoDB(NewSublistName.Text, backlogParent, NewSublistSummary.Text);
+            InsertIntoDB(NewBacklogName.Text, NewBacklogSummary.Text);
         }
 
-        private void InsertIntoDB(string name, string backlogParent, string summary)
+        private void InsertIntoDB(string name, string summary)
         {
             try
             {
                 // Create a new SQLite connection, command, and parameters
                 SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
                 sqlConnection1.Open();
-                SQLiteCommand myCommand = new SQLiteCommand("INSERT INTO sublists (name, backlogParent, summary) VALUES (@param1, '" + backlogParent + "', @param2)", sqlConnection1);
+                SQLiteCommand myCommand = new SQLiteCommand("INSERT INTO backlogs (name, summary) VALUES (@param1, @param2)", sqlConnection1);
                 myCommand.Parameters.Add(new SQLiteParameter("@param1", name));
                 myCommand.Parameters.Add(new SQLiteParameter("@param2", summary));
                 myCommand.ExecuteNonQuery();
 
+                // If everything went ok (no UNIQUE constraints errors), then set the Tag to TRUE
+                this.Tag = true;
+                this.Title = name;
+
                 // Close the connection
                 sqlConnection1.Close();
             }
-            catch (Exception excep)
+            catch (SQLiteException excep)
             {
-                Console.WriteLine(excep.ToString());
+                if (excep.ErrorCode == 19)
+                {
+                    this.Tag = false;
+                    MessageBox.Show("Cannot be the same name as another Backlog.");
+                }
             }
         }
     }

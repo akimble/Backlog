@@ -62,6 +62,10 @@
     <Compile Include="EntriesPage.xaml.cs">
       <DependentUpon>EntriesPage.xaml</DependentUpon>
     </Compile>
+    <Page Include="NewBacklogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="NewSublistWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -80,6 +84,9 @@
     </Compile>
     <Compile Include="MultiTag.cs" />
     <Compile Include="MyColors.cs" />
+    <Compile Include="NewBacklogWindow.xaml.cs">
+      <DependentUpon>NewBacklogWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NewSublistWindow.xaml.cs">
       <DependentUpon>NewSublistWindow.xaml</DependentUpon>
     </Compile>

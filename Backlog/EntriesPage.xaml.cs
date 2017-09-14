@@ -228,16 +228,25 @@ namespace Backlog
         {
             int entries_ID = -1;
 
-            // Create a new SQLite connection, command, and DataReader
-            SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
-            sqlConnection1.Open();
-            SQLiteCommand myID = new SQLiteCommand("SELECT [seq] FROM [sqlite_sequence] WHERE [name] = 'entries'", sqlConnection1);
-            SQLiteDataReader myIDReader = myID.ExecuteReader();
+            try
+            {
+                // Create a new SQLite connection, command, and DataReader
+                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                sqlConnection1.Open();
+                SQLiteCommand myID = new SQLiteCommand("SELECT [seq] FROM [sqlite_sequence] WHERE [name] = 'entries'", sqlConnection1);
+                SQLiteDataReader myIDReader = myID.ExecuteReader();
 
-            // Obtain the latest auto-incremented id for the entries table
-            myIDReader.Read();
-            entries_ID = Convert.ToInt32(myIDReader["seq"]);
-            myIDReader.Close();
+                // Obtain the latest auto-incremented id for the entries table
+                myIDReader.Read();
+                entries_ID = Convert.ToInt32(myIDReader["seq"]);
+                myIDReader.Close();
+
+                return entries_ID;
+            }
+            catch (Exception excep)
+            {
+                Console.WriteLine(excep.ToString());
+            }
 
             return entries_ID;
         }

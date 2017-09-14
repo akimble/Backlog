@@ -207,49 +207,65 @@ namespace Backlog
 
         private void MyWindow_Closing(object sender, EventArgs e)
         {
-            int sublists_ID = getLatestEntries_ID();
+            try
+            {
+                int sublists_ID = getLatestEntries_ID();
 
-            // Obtain the row with the latest id value (i.e. the latest entry)
-            SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
-            sqlConnection1.Open();
-            SQLiteCommand myCommand = new SQLiteCommand("SELECT * FROM [sublists] WHERE [id] = " + sublists_ID, sqlConnection1);
-            SQLiteDataReader myReader = myCommand.ExecuteReader();
+                // Obtain the row with the latest id value (i.e. the latest entry)
+                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                sqlConnection1.Open();
+                SQLiteCommand myCommand = new SQLiteCommand("SELECT * FROM [sublists] WHERE [id] = " + sublists_ID, sqlConnection1);
+                SQLiteDataReader myReader = myCommand.ExecuteReader();
 
-            // Create a Button for the newly inserted row
-            Button myButton = new Button();
-            MultiTag myTags = new MultiTag();
+                // Create a Button for the newly inserted row
+                Button myButton = new Button();
+                MultiTag myTags = new MultiTag();
 
-            // Set Button properties
-            myReader.Read();
-            myButton.Content = myReader["name"].ToString();
-            myButton.Tag = myTags;
-            myButton.Click += new RoutedEventHandler(myButton_Click);
-            // Set myTags properties
-            myTags.Add("sublists_id", myReader["id"]);
-            myTags.Add("sublists_backlogParent", myReader["backlogParent"]);
-            myReader.Close();
+                // Set Button properties
+                myReader.Read();
+                myButton.Content = myReader["name"].ToString();
+                myButton.Tag = myTags;
+                myButton.Click += new RoutedEventHandler(myButton_Click);
+                // Set myTags properties
+                myTags.Add("sublists_id", myReader["id"]);
+                myTags.Add("sublists_backlogParent", myReader["backlogParent"]);
+                myReader.Close();
 
-            // Add created DockPanel to the StackPanel
-            DockPanel entriesDockPanel = createSublistDockPanel(myButton);
-            sublistStackPanel.Children.Add(entriesDockPanel);
+                // Add created DockPanel to the StackPanel
+                DockPanel entriesDockPanel = createSublistDockPanel(myButton);
+                sublistStackPanel.Children.Add(entriesDockPanel);
 
-            sqlConnection1.Close();
+                sqlConnection1.Close();
+            }
+            catch (Exception excep)
+            {
+                Console.WriteLine(excep.ToString());
+            }
         }
 
         private int getLatestEntries_ID()
         {
             int entries_ID = -1;
 
-            // Create a new SQLite connection, command, and DataReader
-            SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
-            sqlConnection1.Open();
-            SQLiteCommand myID = new SQLiteCommand("SELECT [seq] FROM [sqlite_sequence] WHERE [name] = 'sublists'", sqlConnection1);
-            SQLiteDataReader myIDReader = myID.ExecuteReader();
+            try
+            {
+                // Create a new SQLite connection, command, and DataReader
+                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                sqlConnection1.Open();
+                SQLiteCommand myID = new SQLiteCommand("SELECT [seq] FROM [sqlite_sequence] WHERE [name] = 'sublists'", sqlConnection1);
+                SQLiteDataReader myIDReader = myID.ExecuteReader();
 
-            // Obtain the latest auto-incremented id for the entries table
-            myIDReader.Read();
-            entries_ID = Convert.ToInt32(myIDReader["seq"]);
-            myIDReader.Close();
+                // Obtain the latest auto-incremented id for the entries table
+                myIDReader.Read();
+                entries_ID = Convert.ToInt32(myIDReader["seq"]);
+                myIDReader.Close();
+
+                return entries_ID;
+            }
+            catch (Exception excep)
+            {
+                Console.WriteLine(excep.ToString());
+            }
 
             return entries_ID;
         }

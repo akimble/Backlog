@@ -70,8 +70,51 @@ namespace Backlog
 
         private void createBacklogButton_Click(object sender, RoutedEventArgs e)
         {
-            string x = "";
-            this.NavigationService.Navigate(new SublistsPage(x));
+            // Create a new window to input new information about the new Backlog
+            NewBacklogWindow myWindow = new NewBacklogWindow();
+            myWindow.Closing += MyWindow_Closing;
+            myWindow.ShowDialog();
+        }
+
+        private void MyWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            NewBacklogWindow win = sender as NewBacklogWindow;
+
+            // If the Tag is TRUE (no UNIQUE constraints errors) then proceed as normal
+            if ((Boolean)win.Tag)
+            {
+                try
+                {
+                    // Obtain the newly created row
+                    SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                    sqlConnection1.Open();
+                    SQLiteCommand myCommand = new SQLiteCommand("SELECT * FROM [backlogs] WHERE [name] = @param", sqlConnection1);
+                    myCommand.Parameters.Add(new SQLiteParameter("@param", win.Title.ToString()));
+                    SQLiteDataReader myReader = myCommand.ExecuteReader();
+
+                    // Create a Button for the newly inserted row
+                    Button myButton = new Button();
+
+                    // Set Button properties
+                    myReader.Read();
+                    myButton.Content = myReader["name"].ToString();
+                    myButton.Click += new RoutedEventHandler(myButton_Click);
+                    myButton.Margin = new Thickness(100, 2, 100, 2);
+                    myReader.Close();
+
+                    //// Add created DockPanel to the StackPanel
+                    //DockPanel entriesDockPanel = createSublistDockPanel(myButton);
+                    //sublistStackPanel.Children.Add(entriesDockPanel);
+
+                    BacklogsStackPanel.Children.Add(myButton);
+
+                    sqlConnection1.Close();
+                }
+                catch (Exception excep)
+                {
+                    Console.WriteLine(excep.ToString());
+                }
+            }
         }
     }
 }

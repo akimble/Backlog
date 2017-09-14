@@ -1,0 +1,24 @@
+﻿<Window x:Class="Backlog.NewBacklogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Backlog"
+        mc:Ignorable="d"
+        Title="NewBacklogWindow" Height="300" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Background="#FFF4FD39">Backlog Name:</Label>
+        <TextBox x:Name="NewBacklogName" Grid.Row="1" Background="#FF272525" Foreground="#FF24A836"/>
+        <Label Grid.Row="2" Background="#FFF4FD39">Backlog Summary:</Label>
+        <TextBox x:Name="NewBacklogSummary" Grid.Row="3" Background="#FF272525" Foreground="#FF24A836"/>
+        <Button x:Name="Save" Grid.Row="4" Content="Save" Click="Save_Click" IsCancel="True"/>
+    </Grid>
+</Window>
