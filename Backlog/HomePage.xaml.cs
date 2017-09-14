@@ -47,13 +47,86 @@ namespace Backlog
                     myButton.Click += new RoutedEventHandler(myButton_Click);
                     myButton.Margin = new Thickness(100,2,100,2);
 
-                    // Add created button to the stackpanel
-                    BacklogsStackPanel.Children.Add(myButton);
+                    // Add created DockPanel to the StackPanel
+                    DockPanel myDockPanel = createBacklogDockPanel(myButton);
+                    BacklogsStackPanel.Children.Add(myDockPanel);
                 }
 
                 // Close the reader and connection
                 myReader.Close();
                 sqlConnection1.Close();
+            }
+            catch (Exception excep)
+            {
+                Console.WriteLine(excep.ToString());
+            }
+        }
+
+        private DockPanel createBacklogDockPanel(Button myButton)
+        {
+            // Create a DockPanel, delete Button, and MultiTag object
+            DockPanel myDockPanel = new DockPanel();
+            Button deleteButton = new Button();
+            MultiTag myDeleteTags = new MultiTag();
+
+            // Set Button properties
+            deleteButton.Content = "  X  ";
+            deleteButton.Background = MyColors.DarkGrey();
+            deleteButton.Foreground = MyColors.Garnet();
+            deleteButton.Tag = myDeleteTags;
+            deleteButton.Click += DeleteButton_Click;
+            // Set myDeleteTags properties
+            myDeleteTags.Add("name", myButton.Content);
+            myDeleteTags.Add("myDockPanel", myDockPanel);
+
+            // Set Button style as the ToolBar's Button style (no border)
+            Style toolbarButtonStyle = (Style)FindResource(ToolBar.ButtonStyleKey);
+            deleteButton.Style = toolbarButtonStyle;
+
+            // Add both buttons to DockPanel
+            deleteButton.SetValue(DockPanel.DockProperty, Dock.Right);
+            myButton.SetValue(DockPanel.DockProperty, Dock.Left);
+            myDockPanel.Children.Add(deleteButton);
+            myDockPanel.Children.Add(myButton);
+
+            return myDockPanel;
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Bring up a confirmation box
+            var confirmResult = MessageBox.Show("Are you sure you want to delete this backlog?", "Confirm Delete", MessageBoxButton.YesNo);
+
+            // If "Yes" is chosen, delete the backlog from the database
+            if (confirmResult == MessageBoxResult.Yes)
+            {
+                Button deleteButton = sender as Button;
+                MultiTag myTags = (MultiTag)deleteButton.Tag;
+                string name = myTags.Get("name").ToString();
+                DockPanel myDockPanel = (DockPanel)myTags.Get("myDockPanel");
+
+                DeleteFromDB(name, myDockPanel);
+            }
+        }
+
+        private void DeleteFromDB(string name, DockPanel myDockPanel)
+        {
+            try
+            {
+                // Create a new SQLite connection, command, and parameter
+                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                sqlConnection1.Open();
+                SQLiteCommand myCommand1 = new SQLiteCommand("DELETE FROM [entries] WHERE [sublistParent] = (SELECT [id] FROM [sublists] WHERE [backlogParent] = '" + name + "')", sqlConnection1);
+                SQLiteCommand myCommand2 = new SQLiteCommand("DELETE FROM [sublists] WHERE [backlogParent] = '" + name + "'", sqlConnection1);
+                SQLiteCommand myCommand3 = new SQLiteCommand("DELETE FROM [backlogs] WHERE [name] = '" + name + "'", sqlConnection1);
+                myCommand1.ExecuteNonQuery();
+                myCommand2.ExecuteNonQuery();
+                myCommand3.ExecuteNonQuery();
+
+                // Close the connection
+                sqlConnection1.Close();
+
+                BacklogsStackPanel.Children.Remove(myDockPanel);
             }
             catch (Exception excep)
             {
@@ -102,11 +175,9 @@ namespace Backlog
                     myButton.Margin = new Thickness(100, 2, 100, 2);
                     myReader.Close();
 
-                    //// Add created DockPanel to the StackPanel
-                    //DockPanel entriesDockPanel = createSublistDockPanel(myButton);
-                    //sublistStackPanel.Children.Add(entriesDockPanel);
-
-                    BacklogsStackPanel.Children.Add(myButton);
+                    // Add created DockPanel to the StackPanel
+                    DockPanel myDockPanel = createBacklogDockPanel(myButton);
+                    BacklogsStackPanel.Children.Add(myDockPanel);
 
                     sqlConnection1.Close();
                 }

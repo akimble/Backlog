@@ -133,7 +133,7 @@ namespace Backlog
             Style toolbarButtonStyle = (Style)FindResource(ToolBar.ButtonStyleKey);
             deleteButton.Style = toolbarButtonStyle;
 
-            // Add TextBox and Button to DockPanel
+            // Add both buttons to DockPanel
             deleteButton.SetValue(DockPanel.DockProperty, Dock.Right);
             myButton.SetValue(DockPanel.DockProperty, Dock.Left);
             sublistsDockPanel.Children.Add(deleteButton);
