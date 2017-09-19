@@ -20,6 +20,8 @@ namespace Backlog
     /// </summary>
     public partial class NewSublistWindow : Window
     {
+        private readonly string connectionString = @"Data Source=" + System.IO.Directory.GetCurrentDirectory() + "\\backlogs.db";
+
         public NewSublistWindow(string backlogParent)
         {
             InitializeComponent();
@@ -39,7 +41,7 @@ namespace Backlog
             try
             {
                 // Create a new SQLite connection, command, and parameters
-                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                SQLiteConnection sqlConnection1 = new SQLiteConnection(connectionString);
                 sqlConnection1.Open();
                 SQLiteCommand myCommand = new SQLiteCommand("INSERT INTO sublists (name, backlogParent, summary) VALUES (@param1, '" + backlogParent + "', @param2)", sqlConnection1);
                 myCommand.Parameters.Add(new SQLiteParameter("@param1", name));

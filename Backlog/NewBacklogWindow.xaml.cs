@@ -20,6 +20,8 @@ namespace Backlog
     /// </summary>
     public partial class NewBacklogWindow : Window
     {
+        private readonly string connectionString = @"Data Source=" + System.IO.Directory.GetCurrentDirectory() + "\\backlogs.db";
+
         public NewBacklogWindow()
         {
             InitializeComponent();
@@ -35,7 +37,7 @@ namespace Backlog
             try
             {
                 // Create a new SQLite connection, command, and parameters
-                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                SQLiteConnection sqlConnection1 = new SQLiteConnection(connectionString);
                 sqlConnection1.Open();
                 SQLiteCommand myCommand = new SQLiteCommand("INSERT INTO backlogs (name, summary) VALUES (@param1, @param2)", sqlConnection1);
                 myCommand.Parameters.Add(new SQLiteParameter("@param1", name));
@@ -55,6 +57,10 @@ namespace Backlog
                 {
                     this.Tag = false;
                     MessageBox.Show("Cannot be the same name as another Backlog.");
+                }
+                else
+                {
+                    Console.WriteLine(excep);
                 }
             }
         }

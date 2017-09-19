@@ -21,6 +21,8 @@ namespace Backlog
     /// </summary>
     public partial class HomePage : Page
     {
+        private readonly string connectionString = @"Data Source=" + System.IO.Directory.GetCurrentDirectory() + "\\backlogs.db";
+
         public HomePage()
         {
             InitializeComponent();
@@ -32,7 +34,7 @@ namespace Backlog
             try
             {
                 // Create a new SQLite connection, command, and DataReader
-                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                SQLiteConnection sqlConnection1 = new SQLiteConnection(connectionString);
                 sqlConnection1.Open();
                 SQLiteCommand myCommand = new SQLiteCommand("SELECT * FROM backlogs", sqlConnection1);
                 SQLiteDataReader myReader = myCommand.ExecuteReader();
@@ -114,7 +116,7 @@ namespace Backlog
             try
             {
                 // Create a new SQLite connection, command, and parameter
-                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                SQLiteConnection sqlConnection1 = new SQLiteConnection(connectionString);
                 sqlConnection1.Open();
                 SQLiteCommand myCommand1 = new SQLiteCommand("DELETE FROM [entries] WHERE [sublistParent] = (SELECT [id] FROM [sublists] WHERE [backlogParent] = '" + name + "')", sqlConnection1);
                 SQLiteCommand myCommand2 = new SQLiteCommand("DELETE FROM [sublists] WHERE [backlogParent] = '" + name + "'", sqlConnection1);
@@ -159,7 +161,7 @@ namespace Backlog
                 try
                 {
                     // Obtain the newly created row
-                    SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                    SQLiteConnection sqlConnection1 = new SQLiteConnection(connectionString);
                     sqlConnection1.Open();
                     SQLiteCommand myCommand = new SQLiteCommand("SELECT * FROM [backlogs] WHERE [name] = @param", sqlConnection1);
                     myCommand.Parameters.Add(new SQLiteParameter("@param", win.Title.ToString()));

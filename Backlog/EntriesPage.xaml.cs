@@ -21,6 +21,8 @@ namespace Backlog
     /// </summary>
     public partial class EntriesPage : Page
     {
+        private readonly string connectionString = @"Data Source=" + System.IO.Directory.GetCurrentDirectory() + "\\backlogs.db";
+
         public EntriesPage(int sublist_ID, string sublist_Name, string backlogParent)
         {
             InitializeComponent();
@@ -53,7 +55,7 @@ namespace Backlog
             try
             {
                 // Create a new SQLite connection, command, and parameter
-                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                SQLiteConnection sqlConnection1 = new SQLiteConnection(connectionString);
                 sqlConnection1.Open();
                 SQLiteCommand myCommand = new SQLiteCommand("UPDATE [sublists] SET [name] = @param WHERE [id] = " + SublistTitleTextBox.Tag, sqlConnection1);
                 myCommand.Parameters.Add(new SQLiteParameter("@param", SublistTitleTextBox.Text));
@@ -73,7 +75,7 @@ namespace Backlog
             try
             {
                 // Create a new SQLite connection, command, and DataReader
-                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                SQLiteConnection sqlConnection1 = new SQLiteConnection(connectionString);
                 sqlConnection1.Open();
                 SQLiteCommand myCommand = new SQLiteCommand("SELECT * FROM [entries] WHERE [sublistParent] = " + sublist_ID, sqlConnection1);
                 SQLiteDataReader myReader = myCommand.ExecuteReader();
@@ -187,7 +189,7 @@ namespace Backlog
                 int entries_ID = getLatestEntries_ID();
 
                 // Obtain the row with the latest id value (i.e. the latest entry)
-                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                SQLiteConnection sqlConnection1 = new SQLiteConnection(connectionString);
                 sqlConnection1.Open();
                 SQLiteCommand myCommand = new SQLiteCommand("SELECT * FROM [entries] WHERE [id] = " + entries_ID, sqlConnection1);
                 SQLiteDataReader myReader = myCommand.ExecuteReader();
@@ -231,7 +233,7 @@ namespace Backlog
             try
             {
                 // Create a new SQLite connection, command, and DataReader
-                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                SQLiteConnection sqlConnection1 = new SQLiteConnection(connectionString);
                 sqlConnection1.Open();
                 SQLiteCommand myID = new SQLiteCommand("SELECT [seq] FROM [sqlite_sequence] WHERE [name] = 'entries'", sqlConnection1);
                 SQLiteDataReader myIDReader = myID.ExecuteReader();
@@ -268,7 +270,7 @@ namespace Backlog
             try
             {
                 // Create a new SQLite connection, command, and parameter
-                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                SQLiteConnection sqlConnection1 = new SQLiteConnection(connectionString);
                 sqlConnection1.Open();
                 SQLiteCommand myCommand = new SQLiteCommand("UPDATE [entries] SET [entryLine] = @param WHERE [id] =" + entries_id, sqlConnection1);
                 myCommand.Parameters.Add(new SQLiteParameter("@param", updateThisText));
@@ -288,7 +290,7 @@ namespace Backlog
             try
             {
                 // Create a new SQLite connection, command, and parameter
-                SQLiteConnection sqlConnection2 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                SQLiteConnection sqlConnection2 = new SQLiteConnection(connectionString);
                 sqlConnection2.Open();
                 SQLiteCommand myCommand = new SQLiteCommand("INSERT INTO entries (entryLine, sublistParent) VALUES (@param, " + sublist_ID + ")", sqlConnection2);
                 myCommand.Parameters.Add(new SQLiteParameter("@param", insertThisText));
@@ -308,7 +310,7 @@ namespace Backlog
             try
             {
                 // Create a new SQLite connection, command, and parameter
-                SQLiteConnection sqlConnection1 = new SQLiteConnection("Data Source=C:\\Users\\Andrew\\Documents\\Visual Studio 2017\\Projects\\Backlog\\backlogs.db;Version=3;");
+                SQLiteConnection sqlConnection1 = new SQLiteConnection(connectionString);
                 sqlConnection1.Open();
                 SQLiteCommand myCommand = new SQLiteCommand("DELETE FROM [entries] WHERE [id] =" + entries_id, sqlConnection1);
                 myCommand.ExecuteNonQuery();
