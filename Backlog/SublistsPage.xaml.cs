@@ -22,6 +22,7 @@ namespace Backlog
     public partial class SublistsPage : Page
     {
         private readonly string connectionString = @"Data Source=" + System.IO.Directory.GetCurrentDirectory() + "\\backlogs.db";
+        private List<Button> sublistButtons = new List<Button>();
 
         public SublistsPage(string backlogName)
         {
@@ -53,11 +54,21 @@ namespace Backlog
                 SQLiteConnection sqlConnection1 = new SQLiteConnection(connectionString);
                 sqlConnection1.Open();
                 SQLiteCommand myCommand = new SQLiteCommand("UPDATE [backlogs] SET [name] = @param WHERE [name] = '" + BacklogTitleTextbox.Tag + "'", sqlConnection1);
+                SQLiteCommand myCommand2 = new SQLiteCommand("UPDATE [sublists] SET [backlogParent] = @param2 WHERE [backlogParent] = '" + BacklogTitleTextbox.Tag + "'", sqlConnection1);
                 myCommand.Parameters.Add(new SQLiteParameter("@param", BacklogTitleTextbox.Text));
+                myCommand2.Parameters.Add(new SQLiteParameter("@param2", BacklogTitleTextbox.Text));
                 myCommand.ExecuteNonQuery();
+                myCommand2.ExecuteNonQuery();
 
                 // Reset Tag for BacklogTitleTextbox
                 BacklogTitleTextbox.Tag = BacklogTitleTextbox.Text;
+
+                // Update "sublists_backlogParent" tag for each sublist button
+                foreach (Button myButton in sublistButtons)
+                {
+                    MultiTag myTags = (MultiTag)myButton.Tag;
+                    myTags.Update("sublists_backlogParent", BacklogTitleTextbox.Tag);
+                }
 
                 // Close the connection
                 sqlConnection1.Close();
@@ -101,6 +112,9 @@ namespace Backlog
                     // Add created DockPanel to the StackPanel
                     DockPanel entriesDockPanel = createSublistDockPanel(myButton);
                     sublistStackPanel.Children.Add(entriesDockPanel);
+
+                    // Add to sublistButtons to use in BacklogTitleTextbox_LostKeyboardFocus
+                    sublistButtons.Add(myButton);
                 }
 
                 // Close the reader and connection
@@ -156,6 +170,19 @@ namespace Backlog
                 MultiTag myTags = (MultiTag)deleteButton.Tag;
                 int sublist_id = Convert.ToInt32(myTags.Get("sublists_id"));
                 DockPanel myDockPanel = (DockPanel)myTags.Get("myDockPanel");
+
+                // O(N^2) in the worst case. Better to leave the deleted buttons in the sublistButtons List and uselessly
+                // updating their MultiTag tags when the TitleBox is changed.
+                //// Remove button from sublistButtons List
+                //foreach (Button myButton in sublistButtons)
+                //{
+                //    MultiTag myButtonTags = (MultiTag)myButton.Tag;
+                //    if (Convert.ToInt32(myButtonTags.Get("sublists_id")) == sublist_id)
+                //    {
+                //        sublistButtons.Remove(myButton);
+                //        break;
+                //    }
+                //}
 
                 DeleteFromDB(sublist_id, myDockPanel);
             }
@@ -236,6 +263,9 @@ namespace Backlog
                 // Add created DockPanel to the StackPanel
                 DockPanel entriesDockPanel = createSublistDockPanel(myButton);
                 sublistStackPanel.Children.Add(entriesDockPanel);
+
+                // Add to sublistButtons to use in BacklogTitleTextbox_LostKeyboardFocus
+                sublistButtons.Add(myButton);
 
                 sqlConnection1.Close();
             }

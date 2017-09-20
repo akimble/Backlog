@@ -24,5 +24,10 @@ namespace Backlog
         {
             return this.TagDictionary[key];
         }
+
+        public void Update(string key, object value)
+        {
+            this.TagDictionary[key] = value;
+        }
     }
 }
