@@ -102,6 +102,7 @@ namespace Backlog
                     MultiTag myTags = new MultiTag();
 
                     // Set Button properties
+                    myButton.Style = Application.Current.FindResource("SublistButton") as Style;
                     myButton.Content = myReader["name"].ToString();
                     myButton.Tag = myTags;
                     myButton.Click += new RoutedEventHandler(myButton_Click);
@@ -252,6 +253,7 @@ namespace Backlog
 
                 // Set Button properties
                 myReader.Read();
+                myButton.Style = Application.Current.FindResource("SublistButton") as Style;
                 myButton.Content = myReader["name"].ToString();
                 myButton.Tag = myTags;
                 myButton.Click += new RoutedEventHandler(myButton_Click);

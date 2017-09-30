@@ -45,9 +45,10 @@ namespace Backlog
                     Button myButton = new Button();
 
                     // Set properties
+                    myButton.Style = Application.Current.FindResource("BacklogButton") as Style;
                     myButton.Content = myReader["name"].ToString();
+                    myButton.Tag = myReader["summary"].ToString();
                     myButton.Click += new RoutedEventHandler(myButton_Click);
-                    myButton.Margin = new Thickness(100,2,100,2);
 
                     // Add created DockPanel to the StackPanel
                     DockPanel myDockPanel = createBacklogDockPanel(myButton);
@@ -172,9 +173,10 @@ namespace Backlog
 
                     // Set Button properties
                     myReader.Read();
+                    myButton.Style = Application.Current.FindResource("BacklogButton") as Style;
                     myButton.Content = myReader["name"].ToString();
+                    myButton.Tag = myReader["summary"].ToString();
                     myButton.Click += new RoutedEventHandler(myButton_Click);
-                    myButton.Margin = new Thickness(100, 2, 100, 2);
                     myReader.Close();
 
                     // Add created DockPanel to the StackPanel

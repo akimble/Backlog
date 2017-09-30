@@ -22,8 +22,7 @@
             <StackPanel x:Name="BacklogsStackPanel"></StackPanel>
         </ScrollViewer>
 
-        <Button x:Name="createBacklogButton" Grid.Row="2" Content=" + " FontSize="24" HorizontalAlignment="Left" 
-                Margin="10" Background="#FF272525" Foreground="#FF24A836" FontWeight="Bold" 
+        <Button x:Name="createBacklogButton" Grid.Row="2" Style="{StaticResource NewButton}" HorizontalAlignment="Left"
                 Click="createBacklogButton_Click"/>
     </Grid>
 </Page>

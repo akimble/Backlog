@@ -86,11 +86,9 @@ namespace Backlog
                     TextBox myTextBox = new TextBox();
 
                     // Set TextBox properties
+                    myTextBox.Style = Application.Current.FindResource("EntryTextBox") as Style;
                     myTextBox.Text = myReader["entryLine"].ToString();
-                    myTextBox.Margin = new Thickness(10, 2, 10, 2);
                     myTextBox.Tag = myReader["id"];
-                    myTextBox.Background = MyColors.DarkGrey();
-                    myTextBox.Foreground = MyColors.White();
 
                     // Event if the keyboard loses focus on the TextBox
                     myTextBox.LostKeyboardFocus += MyTextBox_LostKeyboardFocus;
@@ -163,12 +161,7 @@ namespace Backlog
             Button newEntryButton = new Button();
 
             // Set Button properties
-            newEntryButton.Content = " + ";
-            newEntryButton.Background = MyColors.DarkGrey();
-            newEntryButton.Foreground = MyColors.Green();
-            newEntryButton.FontWeight = FontWeights.Bold;
-            newEntryButton.FontSize = 26;
-            newEntryButton.Margin = new Thickness(10, 2, 10, 2);
+            newEntryButton.Style = Application.Current.FindResource("NewButton") as Style;
             newEntryButton.Click += NewEntryButton_Click;
             newEntryButton.Tag = sublist_ID;
 
@@ -199,11 +192,9 @@ namespace Backlog
 
                 // Set TextBox properties
                 myReader.Read();
+                myTextBox.Style = Application.Current.FindResource("EntryTextBox") as Style;
                 myTextBox.Text = myReader["entryLine"].ToString();
-                myTextBox.Margin = new Thickness(10, 2, 10, 2);
                 myTextBox.Tag = myReader["id"];
-                myTextBox.Background = MyColors.DarkGrey();
-                myTextBox.Foreground = MyColors.White();
                 myReader.Close();
 
                 // Event if the keyboard loses focus on the TextBox
