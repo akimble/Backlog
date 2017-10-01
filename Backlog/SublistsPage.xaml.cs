@@ -137,18 +137,12 @@ namespace Backlog
             MultiTag myDeleteTags = new MultiTag();
 
             // Set Button properties
-            deleteButton.Content = "  X  ";
-            deleteButton.Background = MyColors.DarkGrey();
-            deleteButton.Foreground = MyColors.Garnet();
+            deleteButton.Style = Application.Current.FindResource("DeleteButton") as Style;
             deleteButton.Tag = myDeleteTags;
             deleteButton.Click += DeleteButton_Click;
             // Set myDeleteTags properties
             myDeleteTags.Add("sublists_id", myTags.Get("sublists_id"));
             myDeleteTags.Add("myDockPanel", sublistsDockPanel);
-
-            // Set Button style as the ToolBar's Button style (no border)
-            Style toolbarButtonStyle = (Style)FindResource(ToolBar.ButtonStyleKey);
-            deleteButton.Style = toolbarButtonStyle;
 
             // Add both buttons to DockPanel
             deleteButton.SetValue(DockPanel.DockProperty, Dock.Right);
