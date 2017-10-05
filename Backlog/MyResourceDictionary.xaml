@@ -43,6 +43,8 @@
         <Setter Property="Foreground" Value="White" />
         <Setter Property="Background" Value="{StaticResource DarkGrey}" />
         <Setter Property="Margin" Value="10,2,10,2" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="AcceptsReturn" Value="True" />
     </Style>
 
     <Style x:Key="NewButton" TargetType="Button">
@@ -59,6 +61,5 @@
         <Setter Property="Foreground" Value="{StaticResource Garnet}" />
         <Setter Property="Background" Value="{StaticResource DarkGrey}" />
     </Style>
-
 
 </ResourceDictionary>
