@@ -36,6 +36,7 @@
     </Style>
 
     <SolidColorBrush x:Key="DarkGrey" Color="#FF272525" />
+    <Color x:Key="DarkGreyColor">#FF272525</Color>
     <SolidColorBrush x:Key="Green" Color="#FF24A836" />
     <SolidColorBrush x:Key="Garnet" Color="#bc010b" />
 
@@ -45,6 +46,14 @@
         <Setter Property="Margin" Value="10,2,10,2" />
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="AcceptsReturn" Value="True" />
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush Opacity="0.5">
+                    <GradientStop Color="{StaticResource DarkGreyColor}" Offset="0.5"/>
+                    <GradientStop Color="CornflowerBlue" Offset="1.2" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style x:Key="NewButton" TargetType="Button">
